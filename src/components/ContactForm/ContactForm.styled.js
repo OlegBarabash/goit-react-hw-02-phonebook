@@ -2,15 +2,11 @@ import styled from 'styled-components';
 import { Form, Field, ErrorMessage } from 'formik';
 
 export const StyledForm = styled(Form)`
-  width: 350px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
-  background: #f9f9f9;
-  padding: 25px;
-  margin: 150px 0;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 `;
 
 export const Label = styled.label`
@@ -21,6 +17,14 @@ export const Label = styled.label`
 `;
 
 export const StyledField = styled(Field)`
+  width: 94%;
+  border: 1px solid #ccc;
+  background: #fff;
+  margin: 0 0 5px;
+  padding: 10px;
+`;
+
+export const StyledInput = styled.input`
   width: 94%;
   border: 1px solid #ccc;
   background: #fff;
