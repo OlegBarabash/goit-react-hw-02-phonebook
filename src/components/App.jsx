@@ -5,26 +5,37 @@ import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 import { Container } from './App.styled.js';
 
-const contactsBook = [
-  { id: 1, contactName: 'Oleg', number: '123456789' },
-  { id: 2, contactName: 'Oksana', number: '987456321' },
-  { id: 'id-1', contactName: 'Rosie Simpson', number: '459-12-56' },
-  { id: 'id-2', contactName: 'Hermione Kline', number: '443-89-12' },
-  { id: 'id-3', contactName: 'Eden Clements', number: '645-17-79' },
-  { id: 'id-4', contactName: 'Annie Copeland', number: '227-91-26' },
-];
+const LOCALSTORAGE_KEY = 'contactBoock';
 
 export class App extends Component {
   state = {
-    contacts: contactsBook,
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const savedContacts = localStorage.getItem(LOCALSTORAGE_KEY);
+    if (savedContacts !== null) {
+      this.setState({
+        contacts: JSON.parse(savedContacts),
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.filters !== this.state.contacts) {
+      localStorage.setItem(
+        LOCALSTORAGE_KEY,
+        JSON.stringify(this.state.contacts)
+      );
+    }
+  }
 
   addContact = ({ name, number }) => {
     const isExist = this.state.contacts.find(
       ({ contactName }) => contactName.toLowerCase() === name.toLowerCase()
     );
-    console.log('isExist', isExist);
+
     if (isExist) {
       alert(`${isExist.contactName} is alredy in contacts!`);
       return;
@@ -69,9 +80,18 @@ export class App extends Component {
       <Container>
         <h1>Phonebook</h1>
         <ContactForm onAdd={this.addContact} />
-        <h2>Contacts</h2>
-        <Filter onFilter={this.onFind} />
-        <ContactList contArr={filteredContacts} onDelete={this.deleteContact} />
+        {!filteredContacts.length ? (
+          <h2>No contacts</h2>
+        ) : (
+          <>
+            <h2>Contacts</h2>
+            <Filter onFilter={this.onFind} />
+            <ContactList
+              contArr={filteredContacts}
+              onDelete={this.deleteContact}
+            />
+          </>
+        )}
       </Container>
     );
   }
